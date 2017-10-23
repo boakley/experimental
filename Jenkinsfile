@@ -3,10 +3,17 @@ pipeline {
   stages {
     stage('Checkout Code') {
       steps {
-        git(url: 'https://github.com/boakley/robotframework-lint.git', branch: 'master')
-        git(url: 'https://github.com/boakley/robotframework-hub.git', branch: 'master')
-        sh '''echo "pwd: `pwd`"
-ls -l'''
+        dir('robotframework-lint') {
+            git(url: 'https://github.com/boakley/robotframework-lint.git', branch: 'master')
+        }
+        dir('robotframework-hub') {
+            git(url: 'https://github.com/boakley/robotframework-hub.git', branch: 'master')
+        }
+        sh '''
+        echo 'hello, world'
+        echo "pwd: `pwd`"
+        ls -l
+        '''
       }
     }
     stage('Unit Tests') {
