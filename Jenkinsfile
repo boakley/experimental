@@ -3,22 +3,43 @@ pipeline {
   stages {
     stage('Checkout Code') {
       steps {
-        dir('robotframework-lint') {
-            git(url: 'https://github.com/boakley/robotframework-lint.git', branch: 'master')
+        dir(path: 'robotframework-lint') {
+          git(url: 'https://github.com/boakley/robotframework-lint.git', branch: 'master')
         }
-        dir('robotframework-hub') {
-            git(url: 'https://github.com/boakley/robotframework-hub.git', branch: 'master')
+        
+        dir(path: 'robotframework-hub') {
+          git(url: 'https://github.com/boakley/robotframework-hub.git', branch: 'master')
         }
+        
         sh '''
-        echo 'hello, world'
+        echo \'hello, world\'
         echo "pwd: `pwd`"
         ls -l
         '''
       }
     }
     stage('Unit Tests') {
-      steps {
-        sh 'echo "unit tests..."'
+      parallel {
+        stage('books2read') {
+          steps {
+            sh 'echo "unit tests..."'
+          }
+        }
+        stage('draft2digital') {
+          steps {
+            sh 'echo \'python manage.py test draft2digital\''
+          }
+        }
+        stage('reporting') {
+          steps {
+            sh 'echo \'python manage.py test reporting\''
+          }
+        }
+        stage('things2do') {
+          steps {
+            sh 'echo \'python manage.py test things2do\''
+          }
+        }
       }
     }
     stage('Robot Tests') {
@@ -35,9 +56,14 @@ pipeline {
         }
       }
     }
-    stage('Deploy to Staging?') {
+    stage('Final QA') {
       steps {
-        sh 'echo \'deploying to staging\''
+        input 'Hey! Yo! All systems go?'
+      }
+    }
+    stage('Deploy to Staging') {
+      steps {
+        sh 'echo "deploying..."'
       }
     }
   }
