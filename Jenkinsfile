@@ -1,15 +1,12 @@
 pipeline {
   agent any
-//    node {
-//      label 'Whatever'
-//    }
-    
-//  }
   stages {
-    stage('Build') {
+    stage('Checkout Code') {
       steps {
-        git(url: 'https://github.com/boakley/robotframework-lint.git', branch: 'master', changelog: true)
+        git(url: 'https://github.com/boakley/robotframework-lint.git', branch: 'master')
         git(url: 'https://github.com/boakley/robotframework-hub.git', branch: 'master')
+        sh '''echo "pwd: `pwd`"
+ls -l'''
       }
     }
     stage('Unit Tests') {
