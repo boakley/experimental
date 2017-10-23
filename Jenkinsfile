@@ -4,7 +4,7 @@ pipeline {
 //      label 'Whatever'
 //    }
     
-  }
+//  }
   stages {
     stage('Build') {
       steps {
